@@ -1,3 +1,14 @@
+<script>
+   $('[name="rockon-opt-env-var-btn"').click(function() {
+        var inputText = $(':text, :password', $(this).parent().parent());
+        var isActive = $(this).hasClass("btn-primary");
+        inputText.prop( "disabled", isActive );
+	$(this).removeClass(isActive ? "btn-primary" : "btn-default");
+	$(this).addClass(isActive ? "btn-default" : "btn-primary");
+        $(this).text(isActive ? "Inactive" : "Active");
+   });
+</script>
+
 <div class="row">
   <div class="col-md-10">
     <label class="control-label"></label>
@@ -7,18 +18,48 @@
 	<div class="messages"></div>
 	{{#each cc}}
         <div class="form-group">
-            <label class="control-label col-sm-3" for="cc">{{this.label}}<span class="required">*</span></label>
+	    {{#if this.optional}}
+<!-- TODO: move the #if inside the span-class -->
+		<label class="control-label col-sm-3" for="cc">{{this.label}}<span class="optional"></span></label>
+	    {{else}}
+		<label class="control-label col-sm-3" for="cc">{{this.label}}<span class="required">*</span></label>
+	    {{/if}}
         <div class="controls">
-        <div class="col-sm-6">
-            <input class="form-control" 
-            {{#if (findInputType this.label)}}
-                 type="password"
-            {{else}}
-                 type="text"
+        <div class="col-sm-8">
+
+	<div class="input-group">
+            {{#if this.optional}}
+	        <span class="input-group-btn">
+		    <button type="button" name="rockon-opt-env-var-btn" class="btn btn-default">Inactive</button>
+	        </span>
             {{/if}}
-            id="{{this.id}}" name="{{this.id}}" value="{{#unless null}}{{this.val}}{{/unless}}">
-         </div>&nbsp;&nbsp;
-         <i class="fa fa-info-circle fa-lg" title="{{this.description}}" rel="tooltop"></i>
+
+            <input class="form-control" id="{{this.id}}" name="{{this.id}}"
+                {{#if (findInputType this.label)}}
+                    type="password"
+                {{else}}
+                    type="text"
+                {{/if}}
+  	        value="
+	        {{~#if (isNull this.val)~}}
+	            {{~#unless (isNull this.default_val)~}}
+        	       	{{~this.default_val~}}
+	            {{~/unless~}} 	        
+                {{~else~}}
+                    {{~this.val~}}
+                {{~/if~}}
+                "
+	        placeholder="
+                {{~#unless (isNull this.default_val)~}}
+                       {{~this.default_val~}}
+                {{~/unless~}}
+	        "
+	        {{#if this.optional}}disabled{{/if}}
+	    >
+            <span class="input-group-addon"><i class="fa fa-info-circle fa-lg" title="{{this.description}}" rel="tooltop"></i></span>
+	 </div>
+
+         </div>
         </div>
         </div>
         {{/each}}

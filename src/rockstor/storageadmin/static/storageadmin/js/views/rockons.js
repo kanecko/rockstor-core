@@ -710,6 +710,7 @@ RockonCustomChoice = RockstorWizardPage.extend({
             rules: rules,
             messages: messages
         });
+        
         return this;
     },
 
@@ -729,11 +730,16 @@ RockonCustomChoice = RockstorWizardPage.extend({
 
     initHandlebarHelpers: function() {
         Handlebars.registerHelper('findInputType', function(ccLabel) {
-            if (ccLabel.match(/password/i)) {
+            if (ccLabel.match(/password/i) && !ccLabel.match(/list|path|file/i)){
                 return true;
             }
             return false;
         });
+ 
+        Handlebars.registerHelper('isNull', function(fieldValue) {
+            return _.isNull(fieldValue) || _.isUndefined(fieldValue);
+        });
+
     }
 });
 
