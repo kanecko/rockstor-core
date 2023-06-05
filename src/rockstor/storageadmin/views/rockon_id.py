@@ -183,6 +183,15 @@ class RockOnIdView(rfc.GenericView, NetworkMixin):
                             handle_exception(Exception(e_msg), request)
                         ceo = DContainerEnv.objects.get(container=co, key=e)
                         ceo.val = env_map[e]
+                        logger.error("KANEC install begin")
+                        logger.error(e)
+                        logger.error(ceo.val)
+                        logger.error(ceo.description)
+                        logger.error(ceo.label)
+                        logger.error(ceo.optional)
+                        logger.error(ceo.define_env_var)
+                        logger.error(ceo.default_val)
+                        logger.error("KANEC install end")
                         ceo.save()
                 task_result_handle = install(rockon.id)
                 rockon.taskid = task_result_handle.id

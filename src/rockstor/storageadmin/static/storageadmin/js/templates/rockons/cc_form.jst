@@ -1,10 +1,11 @@
 <script>
-   $('[name="rockon-opt-env-var-btn"').click(function() {
+   $('[name$="-defined"]').click(function() {
         var inputText = $(':text, :password', $(this).parent().parent());
         var isActive = $(this).hasClass("btn-primary");
         inputText.prop( "disabled", isActive );
 	$(this).removeClass(isActive ? "btn-primary" : "btn-default");
 	$(this).addClass(isActive ? "btn-default" : "btn-primary");
+        $(this).val(isActive ? "Inactive" : "Active");
         $(this).text(isActive ? "Inactive" : "Active");
    });
 </script>
@@ -30,7 +31,7 @@
 	<div class="input-group">
             {{#if this.optional}}
 	        <span class="input-group-btn">
-		    <button type="button" name="rockon-opt-env-var-btn" class="btn btn-default">Inactive</button>
+		    <button type="button" id="{{this.id}}-defined" name="{{this.id}}-defined" class="btn btn-default" value="Inactive">Inactive</button>
 	        </span>
             {{/if}}
 

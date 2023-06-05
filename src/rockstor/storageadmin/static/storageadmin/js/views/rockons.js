@@ -812,10 +812,15 @@ RockonEnvironment = RockonCustomChoice.extend({
             return $.Deferred().reject();
         }
         var env_map = {};
+        console.log("KANEC START");
         var envars = this.custom_config.filter(function(cvar) {
             env_map[cvar.get('key')] = this.$('#' + cvar.id).val();
+            console.log(cvar.get('key'));
+            console.log(this.$('#' + cvar.id).val());
+            console.log(this.$('#' + cvar.id + "-defined").val());
             return cvar;
         }, this);
+        console.log("KANEC END");
         this.model.set('env_map', env_map);
         return $.Deferred().resolve();
     }
