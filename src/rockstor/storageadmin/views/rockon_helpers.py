@@ -329,7 +329,8 @@ def cargs(container):
 def envars(container):
     var_list = []
     for e in DContainerEnv.objects.filter(container=container):
-        var_list.extend(["-e", "{}={}".format(e.key, e.val)])
+        if e.define_env_var:
+            var_list.extend(["-e", "{}={}".format(e.key, e.val)])
     return var_list
 
 

@@ -38,7 +38,13 @@
   <tr>
     <td>Env</td>
     <td>{{@key}}</td>
-    <td>{{this}}</td>
+    <td>
+	{{#if this.define_env_var}}
+        	{{this.val}}
+        {{else}}
+        	<i>Inactive</i>
+        {{/if}}
+    </td>
   </tr>
   {{/each}}
 </table>

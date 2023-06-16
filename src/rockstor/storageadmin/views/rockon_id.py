@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
 import time
+import json
 
 from django.db import transaction
 from rest_framework.response import Response
@@ -182,16 +183,20 @@ class RockOnIdView(rfc.GenericView, NetworkMixin):
                             e_msg = ("Invalid environment variable ({}).").format(e)
                             handle_exception(Exception(e_msg), request)
                         ceo = DContainerEnv.objects.get(container=co, key=e)
-                        ceo.val = env_map[e]
                         logger.error("KANEC install begin")
+                        //logger.error(env_map[e])
+                        //logger.error(env_map)
+                        env_obj = env_map[e]
+                        ceo.val = env_obj['val']
+                        ceo.define_env_var = env_obj['define_env_var']
+                        //logger.error("--")
                         logger.error(e)
                         logger.error(ceo.val)
-                        logger.error(ceo.description)
-                        logger.error(ceo.label)
                         logger.error(ceo.optional)
                         logger.error(ceo.define_env_var)
                         logger.error(ceo.default_val)
                         logger.error("KANEC install end")
+                        
                         ceo.save()
                 task_result_handle = install(rockon.id)
                 rockon.taskid = task_result_handle.id

@@ -1,3 +1,7 @@
+<!-- TODO: fixme when setting env_var, then pressing next, then pressing back; the
+var values wont be stored inbetween 
+ TODO: when install failed, then went to reinstall, the values were stored
+in between, but the Active/Inactive value wasnt stored-->
 <script>
    $('[name$="-defined"]').click(function() {
         var inputText = $(':text, :password', $(this).parent().parent());
