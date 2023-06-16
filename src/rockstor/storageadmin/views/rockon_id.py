@@ -184,12 +184,9 @@ class RockOnIdView(rfc.GenericView, NetworkMixin):
                             handle_exception(Exception(e_msg), request)
                         ceo = DContainerEnv.objects.get(container=co, key=e)
                         logger.error("KANEC install begin")
-                        //logger.error(env_map[e])
-                        //logger.error(env_map)
                         env_obj = env_map[e]
                         ceo.val = env_obj['val']
                         ceo.define_env_var = env_obj['define_env_var']
-                        //logger.error("--")
                         logger.error(e)
                         logger.error(ceo.val)
                         logger.error(ceo.optional)

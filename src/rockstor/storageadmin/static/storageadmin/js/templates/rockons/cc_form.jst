@@ -1,16 +1,26 @@
-<!-- TODO: fixme when setting env_var, then pressing next, then pressing back; the
-var values wont be stored inbetween 
- TODO: when install failed, then went to reinstall, the values were stored
-in between, but the Active/Inactive value wasnt stored-->
+<!-- 
+TODO: test with required only and mixed - required and optional vars
+TODO: follow env_map occurences and change logic accordingly
+TODO: move script out
+TODO: unit tests
+ -->
 <script>
    $('[name$="-defined"]').click(function() {
-        var inputText = $(':text, :password', $(this).parent().parent());
-        var isActive = $(this).hasClass("btn-primary");
+	const activeButtonClass = "btn-primary";
+	const inactiveButtonClass = "btn-default";
+	const activeString = "Active";
+
+	var $this = $(this);
+        var inputText = $(':text, :password', $this.parent().parent());
+        var isActive = $this.val() == activeString;
+
         inputText.prop( "disabled", isActive );
-	$(this).removeClass(isActive ? "btn-primary" : "btn-default");
-	$(this).addClass(isActive ? "btn-default" : "btn-primary");
-        $(this).val(isActive ? "Inactive" : "Active");
-        $(this).text(isActive ? "Inactive" : "Active");
+	$this.removeClass(isActive ? activeButtonClass : inactiveButtonClass);
+	$this.addClass(isActive ? inactiveButtonClass : activeButtonClass);
+
+	var isActiveString = isActive ? "Inactive" : activeString;
+        $this.val(isActiveString);
+        $this.text(isActiveString);
    });
 </script>
 
@@ -23,19 +33,27 @@ in between, but the Active/Inactive value wasnt stored-->
 	<div class="messages"></div>
 	{{#each cc}}
         <div class="form-group">
-	    {{#if this.optional}}
-<!-- TODO: move the #if inside the span-class -->
-		<label class="control-label col-sm-3" for="cc">{{this.label}}<span class="optional"></span></label>
-	    {{else}}
-		<label class="control-label col-sm-3" for="cc">{{this.label}}<span class="required">*</span></label>
-	    {{/if}}
+		<label class="control-label col-sm-3" for="cc">
+		{{this.label}}
+		{{#if this.optional}}
+			<span class="optional"></span>
+		{{else}}
+			<span class="required">*</span>
+		{{/if}}
+		</label>
         <div class="controls">
         <div class="col-sm-8">
 
 	<div class="input-group">
             {{#if this.optional}}
 	        <span class="input-group-btn">
-		    <button type="button" id="{{this.id}}-defined" name="{{this.id}}-defined" class="btn btn-default" value="Inactive">Inactive</button>
+		    <button type="button" id="{{this.id}}-defined" name="{{this.id}}-defined" style="height:34px"
+			{{#if this.define_env_var}}
+				class="btn btn-primary" value="Active">Active
+			{{else}}
+			        class="btn btn-default" value="Inactive">Inactive
+			{{/if}}
+		    </button>
 	        </span>
             {{/if}}
 
@@ -59,7 +77,11 @@ in between, but the Active/Inactive value wasnt stored-->
                        {{~this.default_val~}}
                 {{~/unless~}}
 	        "
-	        {{#if this.optional}}disabled{{/if}}
+	        {{#if this.optional}}
+			{{#unless this.define_env_var}}
+				disabled
+			{{/unless}}
+		{{/if}}
 	    >
             <span class="input-group-addon"><i class="fa fa-info-circle fa-lg" title="{{this.description}}" rel="tooltop"></i></span>
 	 </div>

@@ -51,7 +51,14 @@
 {{#each env}}
     <tr>
         <td>Env</td>
-        <td>{{this.val}}&nbsp;&nbsp<i class="fa fa-info-circle" title="{{this.description}}" rel="tooltip"></i></td>
+        <td>
+        {{#if this.define_env_var}}
+                {{this.val}}
+        {{else}}
+                <i>Inactive</i>
+        {{/if}}
+	&nbsp;&nbsp<i class="fa fa-info-circle" title="{{this.description}}" rel="tooltip"></i>
+	</td>
         <td>{{this.key}}</td>
     </tr>
 {{/each}}
